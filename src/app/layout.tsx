@@ -1,0 +1,60 @@
+import type { Metadata, Viewport } from "next";
+import "./globals.css";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover",
+  themeColor: "#0D9488",
+};
+
+export const metadata: Metadata = {
+  title: "StockWatch OS - Kulkas Pintar & AI Vision",
+  description:
+    "Kurangi food waste dengan Smart Scan AI Gemma 4 dan pengingat kadaluwarsa pintar.",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "StockWatch OS",
+  },
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="id">
+      <body className="antialiased min-h-screen bg-slate-50 dark:bg-zinc-950 text-slate-900 dark:text-zinc-100">
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                  navigator.serviceWorker.register('/sw.js').then(function(reg) {
+                    // Service Worker registered successfully
+                  }).catch(function(err) {
+                    console.warn('SW registration failed:', err);
+                  });
+                });
+              }
+            `,
+          }}
+        />
+        {/* Efek Background Animasi Blob */}
+        <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden hidden md:block">
+          <div className="absolute top-[-10%] left-[-5%] w-[40rem] h-[40rem] bg-teal-400/25 rounded-full mix-blend-multiply filter blur-3xl animate-pulse"></div>
+          <div
+            className="absolute bottom-[-10%] right-[-5%] w-[40rem] h-[40rem] bg-emerald-400/25 rounded-full mix-blend-multiply filter blur-3xl animate-pulse"
+            style={{ animationDelay: "2s" }}
+          ></div>
+        </div>
+        {children}
+      </body>
+    </html>
+  );
+}
